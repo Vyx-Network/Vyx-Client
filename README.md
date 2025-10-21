@@ -16,18 +16,18 @@ Desktop client for the Vyx bandwidth sharing network. Share your unused bandwidt
 
 ### Download Pre-built Binary
 
-Download the latest release from the [Releases](https://github.com/YOUR_USERNAME/vyx-client/releases) page.
+Download the latest release from the [Releases](https://github.com/Vyx-Network/Vyx-Client/releases) page.
 
 ### Build from Source
 
 **Prerequisites:**
-- Go 1.21 or higher
+- Go 1.25 or higher
 
 **Build commands:**
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/vyx-client.git
+git clone https://github.com/Vyx-Network/Vyx-Client.git
 cd vyx-client
 
 # Build console version (with terminal output)
