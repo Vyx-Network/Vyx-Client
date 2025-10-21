@@ -6,6 +6,13 @@ echo Building Vyx Client - GUI Version
 echo =========================================
 echo.
 
+REM Clean build cache for fresh icon embedding
+echo Cleaning build cache...
+go clean -cache
+
+REM Remove old executable
+if exist vyx-client-gui.exe del vyx-client-gui.exe
+
 REM Build for Windows with GUI flag (hides console window)
 echo Building Windows GUI executable...
 go build -ldflags="-H windowsgui -s -w" -o vyx-client-gui.exe .

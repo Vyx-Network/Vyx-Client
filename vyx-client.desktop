@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Vyx Client
+Comment=Share your unused bandwidth and earn credits
+Exec=/usr/local/bin/vyx-client
+Icon=vyx-client
+Terminal=false
+Categories=Network;P2P;
+Keywords=bandwidth;network;proxy;earnings;
+StartupNotify=true
+StartupWMClass=vyx-client

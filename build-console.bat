@@ -6,6 +6,13 @@ echo Building Vyx Client - Console Version
 echo =========================================
 echo.
 
+REM Clean build cache for fresh icon embedding
+echo Cleaning build cache...
+go clean -cache
+
+REM Remove old executable
+if exist vyx-client-console.exe del vyx-client-console.exe
+
 REM Build for Windows with console window
 echo Building Windows console executable...
 go build -ldflags="-s -w" -o vyx-client-console.exe .
