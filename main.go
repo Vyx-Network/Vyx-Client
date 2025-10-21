@@ -19,7 +19,7 @@ import (
 var iconData []byte
 
 const (
-	VERSION = "0.1.0-experimental"
+	VERSION = "v0.1.1" // Semver format (must start with 'v')
 	WEBSITE = "https://vyx.network"
 )
 
