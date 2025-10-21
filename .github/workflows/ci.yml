@@ -67,11 +67,9 @@ jobs:
             goarch: amd64
             output: vyx-client-linux-amd64
             build_flags: ""
-          - os: ubuntu-latest
-            goos: linux
-            goarch: arm64
-            output: vyx-client-linux-arm64
-            build_flags: ""
+          # Note: ARM64 Linux build disabled due to CGO cross-compilation complexity
+          # Most Linux desktop users are on x86_64 anyway
+          # To enable: install gcc-aarch64-linux-gnu and ARM64 libraries
 
           # macOS builds
           - os: macos-latest
