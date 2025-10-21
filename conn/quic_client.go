@@ -31,13 +31,13 @@ type Connection struct {
 }
 
 var (
-	quicConn              *quic.Conn
-	quicStream            *quic.Stream
-	quicMutex             sync.Mutex
-	clientConns           = make(map[string]*Connection)
-	clientMutex           sync.RWMutex // Changed to RWMutex for better read performance
-	shouldAutoReconnect   bool = true  // Controls whether client should auto-reconnect
-	autoReconnectMutex    sync.RWMutex
+	quicConn            *quic.Conn
+	quicStream          *quic.Stream
+	quicMutex           sync.Mutex
+	clientConns         = make(map[string]*Connection)
+	clientMutex         sync.RWMutex        // Changed to RWMutex for better read performance
+	shouldAutoReconnect bool         = true // Controls whether client should auto-reconnect
+	autoReconnectMutex  sync.RWMutex
 )
 
 /* Retry Strategy:
