@@ -32,3 +32,4 @@ config.json
 # Build directories
 dist/
 build/
+/.claude
