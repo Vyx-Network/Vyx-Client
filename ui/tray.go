@@ -258,14 +258,25 @@ func startAuthServer() string {
 			log.Printf("Received auth callback: Method=%s, Origin=%s, RemoteAddr=%s",
 				r.Method, r.Header.Get("Origin"), r.RemoteAddr)
 
-			// Add CORS headers - allow both localhost and production
+			// Add CORS headers - restrict origins based on debug mode
 			origin := r.Header.Get("Origin")
-			allowedOrigins := []string{
-				"http://localhost:3000",
-				"http://127.0.0.1:8080",
-				"http://localhost:8080",
-				"https://vyx.network",
-				"https://www.vyx.network",
+			var allowedOrigins []string
+
+			// In debug mode, allow localhost origins for development
+			if config.GlobalConfig != nil && config.GlobalConfig.DebugMode {
+				allowedOrigins = []string{
+					"http://localhost:3000",
+					"http://127.0.0.1:8080",
+					"http://localhost:8080",
+					"https://vyx.network",
+					"https://www.vyx.network",
+				}
+			} else {
+				// In production, only allow production origins
+				allowedOrigins = []string{
+					"https://vyx.network",
+					"https://www.vyx.network",
+				}
 			}
 
 			originAllowed := false
@@ -284,6 +295,13 @@ func startAuthServer() string {
 			w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 			w.Header().Set("Access-Control-Allow-Credentials", "true")
+			w.Header().Set("Access-Control-Max-Age", "3600") // Cache preflight requests for 1 hour
+
+			// Security headers to protect against common web vulnerabilities
+			w.Header().Set("X-Content-Type-Options", "nosniff")
+			w.Header().Set("X-Frame-Options", "DENY")
+			w.Header().Set("X-XSS-Protection", "1; mode=block")
+			w.Header().Set("Content-Security-Policy", "default-src 'self'; frame-ancestors 'none';")
 
 			// Handle preflight OPTIONS request
 			if r.Method == "OPTIONS" {
@@ -494,9 +512,9 @@ func triggerLogin(websiteUrl string, loginItem, startItem, stopItem, dashboard, 
 		log.Println("Browser opened successfully - waiting for authentication...")
 	}
 
-	// Start timeout watcher (2 minutes)
+	// Start timeout watcher (30 seconds for security)
 	go func() {
-		timer := time.NewTimer(2 * time.Minute)
+		timer := time.NewTimer(30 * time.Second)
 		defer timer.Stop()
 
 		select {
@@ -505,7 +523,7 @@ func triggerLogin(websiteUrl string, loginItem, startItem, stopItem, dashboard, 
 			log.Println("Authentication timeout cancelled - login successful")
 			return
 		case <-timer.C:
-			log.Println("WARNING: Authentication timeout (2 minutes) - no response from browser")
+			log.Println("WARNING: Authentication timeout (30 seconds) - no response from browser")
 			log.Println("Please try again or check the logs for errors")
 			// UI stays in "Connect" state, user can try again
 		}
