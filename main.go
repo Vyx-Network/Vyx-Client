@@ -26,6 +26,7 @@ const (
 var (
 	guiMode     = flag.Bool("gui", false, "Run in GUI mode (no console window, logs to file)")
 	consoleMode = flag.Bool("console", false, "Run in console mode with visible window")
+	debugMode   = flag.Bool("debug", false, "Run in debug mode (connect to localhost servers: API at 127.0.0.1:8080, QUIC at 127.0.0.1:8443)")
 )
 
 func main() {
@@ -65,6 +66,13 @@ func main() {
 		logger.Error("Could not load config: %v", err)
 	} else {
 		logger.Info("Config loaded - IsLoggedIn: %v, Email: %s", config.IsLoggedIn(), cfg.Email)
+	}
+
+	// Enable debug mode if flag is set
+	if *debugMode {
+		logger.Info("DEBUG MODE ENABLED - Connecting to localhost servers (API: 127.0.0.1:8080, QUIC: 127.0.0.1:8443)")
+		cfg.DebugMode = true
+		config.GlobalConfig.DebugMode = true
 	}
 
 	// Start QUIC connection

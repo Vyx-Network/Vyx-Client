@@ -42,7 +42,13 @@ func Login(email, password string) error {
 		return err
 	}
 
-	resp, err := http.Post("https://api.vyx.network/api/auth/login", "application/json", bytes.NewBuffer(body))
+	// DEBUG MODE: Use localhost API
+	apiURL := "https://api.vyx.network"
+	if config.GlobalConfig != nil && config.GlobalConfig.DebugMode {
+		apiURL = "http://127.0.0.1:8080"
+	}
+
+	resp, err := http.Post(apiURL+"/api/auth/login", "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		return err
 	}
@@ -78,7 +84,13 @@ func Register(email, password string) error {
 		return err
 	}
 
-	resp, err := http.Post("https://api.vyx.network/api/auth/register", "application/json", bytes.NewBuffer(body))
+	// DEBUG MODE: Use localhost API
+	apiURL := "https://api.vyx.network"
+	if config.GlobalConfig != nil && config.GlobalConfig.DebugMode {
+		apiURL = "http://127.0.0.1:8080"
+	}
+
+	resp, err := http.Post(apiURL+"/api/auth/register", "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		return err
 	}

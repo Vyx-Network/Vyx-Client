@@ -131,17 +131,27 @@ func ConnectQuicServer() {
 
 		// Determine server address using smart discovery
 		var serverAddr string
-		apiURL := config.GlobalConfig.ServerURL
-		if apiURL == "" {
-			apiURL = "https://vyx.network"
-		} else if !strings.HasPrefix(apiURL, "http://") && !strings.HasPrefix(apiURL, "https://") {
-			// Add https:// if no protocol specified
-			apiURL = "https://" + apiURL
-		}
+		var apiURL string
 
-		// Get optimal server address
-		// Try API discovery first, fallback to US server (closer to Asia)
-		serverAddr = GetOptimalServer(apiURL, "us.vyx.network:8443")
+		// DEBUG MODE: Use localhost servers for local development
+		if config.GlobalConfig.DebugMode {
+			serverAddr = "127.0.0.1:8443"
+			apiURL = "http://127.0.0.1:8080"
+			log.Printf("DEBUG MODE: Using localhost server (QUIC: %s, API: %s)", serverAddr, apiURL)
+		} else {
+			// PRODUCTION MODE: Use configured servers
+			apiURL = config.GlobalConfig.ServerURL
+			if apiURL == "" {
+				apiURL = "https://vyx.network"
+			} else if !strings.HasPrefix(apiURL, "http://") && !strings.HasPrefix(apiURL, "https://") {
+				// Add https:// if no protocol specified
+				apiURL = "https://" + apiURL
+			}
+
+			// Get optimal server address
+			// Try API discovery first, fallback to US server (closer to Asia)
+			serverAddr = GetOptimalServer(apiURL, "us.vyx.network:8443")
+		}
 
 		// Log connection attempt with attempt number
 		if connectionAttempts > 0 {

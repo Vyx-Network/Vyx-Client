@@ -28,6 +28,12 @@ var triggerLoginChan = make(chan bool, 1)
 var cancelAuthTimeoutChan = make(chan bool, 10)
 
 func SetupTray(websiteUrl string, icon []byte) {
+	// DEBUG MODE: Use localhost website for authentication
+	if config.GlobalConfig != nil && config.GlobalConfig.DebugMode {
+		websiteUrl = "http://127.0.0.1:8080"
+		log.Printf("DEBUG MODE: Using localhost website: %s", websiteUrl)
+	}
+
 	systray.SetTemplateIcon(icon, icon)
 	systray.SetTooltip("Vyx - Proxy Node Client")
 
@@ -256,6 +262,8 @@ func startAuthServer() string {
 			origin := r.Header.Get("Origin")
 			allowedOrigins := []string{
 				"http://localhost:3000",
+				"http://127.0.0.1:8080",
+				"http://localhost:8080",
 				"https://vyx.network",
 				"https://www.vyx.network",
 			}

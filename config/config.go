@@ -19,6 +19,9 @@ type Config struct {
 	VerboseLogging bool `json:"verbose_logging,omitempty"`
 	// AutoStart controls whether the app starts on system boot (default: true)
 	AutoStart *bool `json:"auto_start,omitempty"` // Use pointer to distinguish between false and unset
+	// DEBUG: DebugMode enables local development mode (connects to 127.0.0.1)
+	// API server at 127.0.0.1:8080, QUIC server at 127.0.0.1:8443
+	DebugMode bool `json:"debug_mode,omitempty"`
 }
 
 var GlobalConfig *Config

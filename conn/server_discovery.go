@@ -1,6 +1,7 @@
 package conn
 
 import (
+	"client/config"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -177,6 +178,13 @@ func SelectBestServer(servers []ServerInfo) (string, error) {
 
 // GetOptimalServer discovers and selects the best server, with DNS fallback
 func GetOptimalServer(apiURL string, fallbackAddr string) string {
+	// DEBUG MODE: Skip server discovery and use localhost
+	if config.GlobalConfig != nil && config.GlobalConfig.DebugMode {
+		debugAddr := "127.0.0.1:8443"
+		log.Printf("DEBUG MODE: Skipping server discovery, using localhost: %s", debugAddr)
+		return debugAddr
+	}
+
 	// Try API-based discovery first
 	servers, err := DiscoverServers(apiURL)
 	if err != nil {
