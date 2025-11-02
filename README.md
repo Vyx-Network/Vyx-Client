@@ -179,7 +179,7 @@ Contributions are welcome! Please:
 
 ## Security
 
-- Credentials are stored in your system's secure credential manager
+- Credentials are stored in your system's secure credential manager (Windows Credential Manager, macOS Keychain, Linux Secret Service)
 - All connections use encrypted QUIC protocol
 - API tokens are never logged or exposed
 - See [SECURITY.md](SECURITY.md) for reporting vulnerabilities
